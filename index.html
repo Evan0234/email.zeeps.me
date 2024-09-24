@@ -3,63 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Test</title>
+    <title>Send Test Email</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f5f5f5;
             margin: 0;
         }
-        .form-container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
+        .email-form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
-        .form-container h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #333;
+        .email-form h2 {
+            margin: 0 0 15px;
             text-align: center;
         }
-        .form-container input[type="email"] {
+        .email-form input[type="email"],
+        .email-form input[type="submit"] {
             width: 100%;
             padding: 10px;
-            margin: 10px 0;
+            margin: 5px 0;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
+            border-radius: 4px;
         }
-        .form-container button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
+        .email-form input[type="submit"] {
+            background-color: #28a745;
             color: white;
             border: none;
-            border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
         }
-        .form-container button:hover {
-            background-color: #0056b3;
+        .email-form input[type="submit"]:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
+    <div class="email-form">
+        <h2>Send Test Email</h2>
+        <form id="testEmailForm">
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <input type="submit" value="Send Test Email">
+        </form>
+        <div id="responseMessage"></div>
+    </div>
 
-<div class="form-container">
-    <h1>Send Test Email</h1>
-    <form id="email-form" method="POST" action="send_email.php">
-        <input type="email" name="email" placeholder="Enter your email" required>
-        <button type="submit">Send Test Email</button>
-    </form>
-</div>
+    <script>
+        document.getElementById('testEmailForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
 
+            fetch('https://api.github.com/repos/<username>/<repo>/actions/workflows/send_email.yml/dispatches', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer YOUR_GITHUB_TOKEN`,
+                    'Accept': 'application/vnd.github.v3+json',
+                },
+                body: JSON.stringify({
+                    ref: 'main',
+                    inputs: {
+                        email: email
+                    }
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('responseMessage').textContent = 'Email sent successfully!';
+                } else {
+                    document.getElementById('responseMessage').textContent = 'Error sending email.';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('responseMessage').textContent = 'Error sending email.';
+            });
+        });
+    </script>
 </body>
 </html>
