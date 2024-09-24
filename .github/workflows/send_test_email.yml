@@ -1,30 +1,28 @@
-name: Send Test Email
+name: Deploy Node.js Server
 
 on:
-  workflow_dispatch:
-    inputs:
-      email:
-        description: 'Email address to send the test email to'
-        required: true
+  push:
+    branches:
+      - main
 
 jobs:
-  send_email:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Set up environment
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ssmtp
-          echo "root=noreply@zeeps.me" | sudo tee -a /etc/ssmtp/ssmtp.conf
-          echo "mailhub=smtp.zoho.com:587" | sudo tee -a /etc/ssmtp/ssmtp.conf
-          echo "AuthUser=noreply@zeeps.me" | sudo tee -a /etc/ssmtp/ssmtp.conf
-          echo "AuthPass=${{ secrets.ZOHO_PASSWORD }}" | sudo tee -a /etc/ssmtp/ssmtp.conf
-          echo "UseSTARTTLS=YES" | sudo tee -a /etc/ssmtp/ssmtp.conf
-          echo "FromLineOverride=YES" | sudo tee -a /etc/ssmtp/ssmtp.conf
 
-      - name: Send Email
-        env:
-          ZOHO_EMAIL: noreply@zeeps.me
-        run: |
-          echo "Sending email to ${{ github.event.inputs.email }} from $ZOHO_EMAIL"
-          echo -e "Subject: Test Email\n\nThis is a test email from Zeeps." | ssmtp -v ${{ github.event.inputs.email }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Specify the Node.js version you want to use
+
+      - name: Install dependencies
+        run: npm install express body-parser node-fetch dotenv
+
+      - name: Set up environment variables
+        run: echo "EMAIL_TOKEN=${{ secrets.EMAIL_TOKEN }}" >> $GITHUB_ENV
+
+      - name: Start server
+        run: node server.js &
