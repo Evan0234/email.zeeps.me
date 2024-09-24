@@ -15,6 +15,7 @@ jobs:
         env:
           ZOHO_EMAIL: noreply@zeeps.me
           ZOHO_PASSWORD: ${{ secrets.ZOHO_PASSWORD }}
+          EMAIL_TOKEN: ${{ secrets.EMAIL_TOKEN }} 
         run: |
           echo "Sending email to ${{ github.event.inputs.email }} from $ZOHO_EMAIL"
           echo -e "Subject: Test Email\n\nThis is a test email from Zeeps." | ssmtp -v ${{ github.event.inputs.email }}
