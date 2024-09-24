@@ -68,7 +68,7 @@
                 method: 'POST',
                 headers: {
                     'Accept': 'application/vnd.github.v3+json',
-                    // Authorization header is not included for security reasons
+                    'Authorization': `Bearer ${{ secrets.EMAIL_TOKEN }}`, // Use the secret directly in the GitHub Actions workflow
                 },
                 body: JSON.stringify({
                     ref: 'main', // Change to your default branch if necessary
