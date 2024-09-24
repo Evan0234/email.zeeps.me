@@ -9,9 +9,7 @@ require 'path_to_phpmailer/src/SMTP.php';
 
 // Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = htmlspecialchars($_POST['name']);
     $email = htmlspecialchars($_POST['email']);
-    $message = htmlspecialchars($_POST['message']);
 
     // Setup PHPMailer
     $mail = new PHPMailer(true);
@@ -28,16 +26,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Email settings
         $mail->setFrom('noreply@zeeps.me', 'Zeeps Support');
-        $mail->addAddress($email, $name); // Send email to user
+        $mail->addAddress($email); // Send email to the user
 
         // Content
         $mail->isHTML(true);
-        $mail->Subject = 'Thank you for reaching out!';
-        $mail->Body    = "Hi $name,<br><br>Thank you for your message:<br>$message<br><br>We will get back to you shortly.<br>Best,<br>Zeeps Team";
+        $mail->Subject = 'Test Email from Zeeps';
+        $mail->Body    = "Hi there,<br><br>This is a test email from Zeep's noreply system. <br><br>Best regards,<br>Zeeps Team";
 
         // Send email
         $mail->send();
-        echo 'Message has been sent';
+        echo 'Test email has been sent!';
     } catch (Exception $e) {
         echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
