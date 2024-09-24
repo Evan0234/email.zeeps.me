@@ -64,16 +64,15 @@
             event.preventDefault();
             const email = document.getElementById('email').value;
 
-            // Trigger GitHub Actions workflow
-            fetch('https://api.github.com/repos/Evan0234/email.zeeps.me/actions/workflows/send_test_email.yml/dispatches', {
+            // Trigger the GitHub Actions proxy workflow
+            fetch('https://api.github.com/repos/Evan0234/email.zeeps.me/actions/workflows/proxy_send_email.yml/dispatches', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/vnd.github.v3+json',
-                    'Authorization': `Bearer ${EMAIL_TOKEN}`, // This should be fetched from a secure method (not hard-coded)
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    ref: 'main', // Replace with your default branch
+                    ref: 'main', // Replace with your default branch if different
                     inputs: {
                         email: email,
                     },
