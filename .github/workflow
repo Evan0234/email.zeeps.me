@@ -1,0 +1,51 @@
+name: Send Test Email
+
+on:
+  workflow_dispatch:
+    inputs:
+      email:
+        description: 'Email address to send test email'
+        required: true
+
+jobs:
+  send_email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16' # or any version you prefer
+
+      - name: Install dependencies
+        run: npm install nodemailer
+
+      - name: Send email
+        run: |
+          node -e "
+          const nodemailer = require('nodemailer');
+          const transporter = nodemailer.createTransport({
+            host: 'smtp.zoho.com',
+            port: 587,
+            secure: false,
+            auth: {
+              user: 'noreply@zeeps.me',
+              pass: 'YOUR_ZOHO_PASSWORD'
+            }
+          });
+          const mailOptions = {
+            from: 'noreply@zeeps.me',
+            to: '${{ github.event.inputs.email }}',
+            subject: 'Test Email from Zeeps',
+            text: 'This is a test email from Zeeps!'
+          };
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.error('Error sending email:', error);
+            } else {
+              console.log('Email sent:', info.response);
+            }
+          });
+          "
