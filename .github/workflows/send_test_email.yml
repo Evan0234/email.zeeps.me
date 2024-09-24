@@ -13,9 +13,9 @@ jobs:
     steps:
       - name: Send Email
         env:
-          GITHUB_TOKEN: ${{ secrets.EMAIL_TOKEN }}  # Your GitHub token
           ZOHO_EMAIL: noreply@zeeps.me
-          ZOHO_PASSWORD: ${{ secrets.ZOHO_PASSWORD }}  # This secret should contain your Zoho password
+          ZOHO_PASSWORD: ${{ secrets.ZOHO_PASSWORD }}  # Ensure you have this set up
+          EMAIL_TOKEN: ${{ secrets.EMAIL_TOKEN }}  # Reference your token
         run: |
           echo "Sending email to ${{ github.event.inputs.email }} from $ZOHO_EMAIL"
           echo -e "Subject: Test Email\n\nThis is a test email from Zeeps." | ssmtp -v ${{ github.event.inputs.email }}
