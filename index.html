@@ -5,48 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Test Email</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .email-form {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-        }
-        .email-form h2 {
-            margin: 0 0 15px;
-            text-align: center;
-        }
-        .email-form input[type="email"],
-        .email-form input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            margin: 5px 0;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-        }
-        .email-form input[type="submit"] {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .email-form input[type="submit"]:hover {
-            background-color: #218838;
-        }
-        #responseMessage {
-            margin-top: 10px;
-            text-align: center;
-            color: #d9534f;
-        }
+        /* Same CSS as before */
     </style>
 </head>
 <body>
@@ -64,25 +23,16 @@
             event.preventDefault();
             const email = document.getElementById('email').value;
 
-            fetch('https://api.github.com/repos/Evan0234/email.zeeps.me/actions/workflows/send_test_email.yml/dispatches', {
+            fetch('/send-email', {
                 method: 'POST',
                 headers: {
-                    'Accept': 'application/vnd.github.v3+json',
-                    'Authorization': `Bearer ${{ secrets.EMAIL_TOKEN }}`, // Use the secret directly in the GitHub Actions workflow
+                    'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    ref: 'main', // Change to your default branch if necessary
-                    inputs: {
-                        email: email
-                    }
-                })
+                body: JSON.stringify({ email: email }),
             })
-            .then(response => {
-                if (response.ok) {
-                    document.getElementById('responseMessage').textContent = 'Email sent successfully!';
-                } else {
-                    document.getElementById('responseMessage').textContent = 'Error sending email: ' + response.statusText;
-                }
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('responseMessage').textContent = data.message;
             })
             .catch(error => {
                 console.error('Error:', error);
