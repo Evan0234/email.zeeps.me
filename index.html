@@ -42,6 +42,11 @@
         .email-form input[type="submit"]:hover {
             background-color: #218838;
         }
+        #responseMessage {
+            margin-top: 10px;
+            text-align: center;
+            color: #d9534f;
+        }
     </style>
 </head>
 <body>
@@ -59,14 +64,14 @@
             event.preventDefault();
             const email = document.getElementById('email').value;
 
-            fetch('https://api.github.com/repos/<username>/<repo>/actions/workflows/send_email.yml/dispatches', {
+            fetch('https://api.github.com/repos/Evan0234/email.zeeps.me/actions/workflows/send_test_email.yml/dispatches', {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer YOUR_GITHUB_TOKEN`,
                     'Accept': 'application/vnd.github.v3+json',
+                    // Authorization header is not included for security reasons
                 },
                 body: JSON.stringify({
-                    ref: 'main',
+                    ref: 'main', // Change to your default branch if necessary
                     inputs: {
                         email: email
                     }
@@ -76,12 +81,12 @@
                 if (response.ok) {
                     document.getElementById('responseMessage').textContent = 'Email sent successfully!';
                 } else {
-                    document.getElementById('responseMessage').textContent = 'Error sending email.';
+                    document.getElementById('responseMessage').textContent = 'Error sending email: ' + response.statusText;
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                document.getElementById('responseMessage').textContent = 'Error sending email.';
+                document.getElementById('responseMessage').textContent = 'Error sending email: ' + error.message;
             });
         });
     </script>
