@@ -11,11 +11,20 @@ jobs:
   send_email:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ssmtp
+          echo "root=noreply@zeeps.me" | sudo tee -a /etc/ssmtp/ssmtp.conf
+          echo "mailhub=smtp.zoho.com:587" | sudo tee -a /etc/ssmtp/ssmtp.conf
+          echo "AuthUser=noreply@zeeps.me" | sudo tee -a /etc/ssmtp/ssmtp.conf
+          echo "AuthPass=${{ secrets.ZOHO_PASSWORD }}" | sudo tee -a /etc/ssmtp/ssmtp.conf
+          echo "UseSTARTTLS=YES" | sudo tee -a /etc/ssmtp/ssmtp.conf
+          echo "FromLineOverride=YES" | sudo tee -a /etc/ssmtp/ssmtp.conf
+
       - name: Send Email
         env:
           ZOHO_EMAIL: noreply@zeeps.me
-          ZOHO_PASSWORD: ${{ secrets.ZOHO_PASSWORD }}
-          EMAIL_TOKEN: ${{ secrets.EMAIL_TOKEN }} 
         run: |
           echo "Sending email to ${{ github.event.inputs.email }} from $ZOHO_EMAIL"
           echo -e "Subject: Test Email\n\nThis is a test email from Zeeps." | ssmtp -v ${{ github.event.inputs.email }}
