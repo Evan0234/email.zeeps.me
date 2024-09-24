@@ -5,7 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send Test Email</title>
     <style>
-        /* Same CSS as before */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .email-form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .email-form h2 {
+            margin: 0 0 15px;
+            text-align: center;
+        }
+        .email-form input[type="email"],
+        .email-form input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .email-form input[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .email-form input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        #responseMessage {
+            margin-top: 10px;
+            text-align: center;
+            color: #d9534f;
+        }
     </style>
 </head>
 <body>
