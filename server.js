@@ -5,7 +5,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
-app.use(express.static('public')); // Serve your static files from the 'public' directory
+app.use(express.static('public')); // Serve static files from 'public' directory
 
 // Route to send the test email
 app.post('/send-email', async (req, res) => {
@@ -37,6 +37,7 @@ app.post('/send-email', async (req, res) => {
     }
 });
 
+// Start the server
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
